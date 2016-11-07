@@ -1,3 +1,9 @@
-hadoop_projects/project_one/EntityAnalysis$EntityMapper.class
-hadoop_projects/project_one/EntityAnalysis.class
-hadoop_projects/project_one/EntityAnalysis$EntityReducer.class
+hadoop_projects/project_one/EntityAnalysisMRJob.class
+hadoop_projects/project_one/RunClusterFlow.class
+hadoop_projects/project_one/EntityAnalysisMRJob$EntityMapper.class
+hadoop_projects/project_one/etl/EntityStruct$DistanceStruct.class
+hadoop_projects/project_one/EntityAnalysisMRJob$EntityReducer.class
+hadoop_projects/project_one/etl/DuplicateStruct.class
+hadoop_projects/project_one/EntityAnalysisMRJob$EntityReducerClusterSeeds.class
+hadoop_projects/project_one/etl/EntityAnalysisETL.class
+hadoop_projects/project_one/etl/EntityStruct.class

@@ -31,12 +31,26 @@
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-client</artifactId>
       <version>${hadoop.version}</version>      
+    </dependency>
+    <dependency>
+      <groupId>org.apache.crunch</groupId>
+      <artifactId>crunch-core</artifactId>
+      <version>0.12.0</version>      
+    </dependency>
+    <dependency>
+      <groupId>com.rockymadden.stringmetric</groupId>
+      <artifactId>stringmetric-core_2.10</artifactId>
+      <version>0.27.3</version>      
     </dependency>    
+      
   </dependencies>
-  <build>
-  	<plugins>
-  		<plugin>
-  			<groupId>org.apache.maven.plugins</groupId>
+  <profiles>
+  	<profile>
+  		<id>mapreduce</id>
+		  <build>
+		  	<plugins>
+  				<plugin>
+  					<groupId>org.apache.maven.plugins</groupId>
   			<artifactId>maven-compiler-plugin</artifactId>
   			<version>3.0</version>
   			<configuration>
@@ -69,7 +83,7 @@
   					<transformers>
   						<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"></transformer>
   						<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-  							<mainClass>hadoop_projects.project_one.EntityAnalysis</mainClass>
+  							<mainClass>hadoop_projects.project_one.EntityAnalysisMRJob</mainClass>
   						</transformer>
   					</transformers>
   				</configuration>  			  	
@@ -93,6 +107,74 @@
                         </execution>
                     </executions>
                 </plugin>
-  	</plugins>
-  </build>
+  				</plugins>
+  			</build>
+    	</profile>
+    	<profile>
+    		<id>etl</id>
+    				  <build>
+		  	<plugins>
+  				<plugin>
+  					<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-compiler-plugin</artifactId>
+  			<version>3.0</version>
+  			<configuration>
+  				<source>1.7</source>
+  				<target>1.7</target>
+  			</configuration>
+  		</plugin>
+  		
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-shade-plugin</artifactId>
+  			<version>2.3</version>
+  			<executions>
+  			  <execution>
+  			  	<phase>package</phase>
+  			  	<goals>
+  			  		<goal>shade</goal>
+  			  	</goals>
+  			  	<configuration>
+  					<filters>
+  					<filter>
+  						<artifact>*:*</artifact>
+  						<excludes>
+  							<exclude>META-INF/*.SF</exclude>
+  							<exclude>META-INF/*.DSA</exclude>
+  							<exclude>META-INF/*.RSA</exclude>
+  						</excludes>
+  					</filter>
+  					</filters>
+  					<transformers>
+  						<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"></transformer>
+  						<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+  							<mainClass>hadoop_projects.project_one.RunClusterFlow</mainClass>
+  						</transformer>
+  					</transformers>
+  				</configuration>  			  	
+  			  </execution>
+  			</executions>  			
+  		</plugin>
+		<plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+               <configuration>
+                   <tasks>
+                            <copy file="target/${project.name}-${project.version}.jar"
+                                  tofile="${project.basedir}/uberjar/ubu-etl.jar"/>
+                        </tasks>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+  				</plugins>
+  			</build>
+    	</profile>
+  </profiles>
+  
 </project>
